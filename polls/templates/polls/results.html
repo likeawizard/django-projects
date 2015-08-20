@@ -1,9 +1,16 @@
 {% if messages %}
+    {% autoescape off %}
+    <div class="alert">
     {% for message in messages %}
-    </br>
-    <h1>{{ message }}</h1>
+        {% if message.tags == "info" %}
+            <h2>{{ message }}</h2>
+        {% else %}
+            <p>{{ message }}</p>
+        {% endif %}
+    
     {% endfor %}
-
+    </div>
+    {% endautoescape %}
 {% endif %}
 
 <h1>{{ poll.question }}</h1>

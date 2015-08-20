@@ -30,17 +30,16 @@ def vote(request, poll_id):
             'error_message': "You didn't select a choice.",
         })
     else:
-        if (request.session.get(poll_id, 'False')):
-	    return render(request, 'polls/detail.html', {
-            'poll': p,
-            'error_message': "You already voted!.",
-        })
+        if (request.session.get(poll_id, False)):
+	    messages.success(request, 'You already voted on this poll!')
+	    return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
 	else:
-            request.session['poll_id'] = 'True'
             selected_choice.votes += 1
             selected_choice.save()
             # Always return an HttpResponseRedirect after successfully dealing
             # with POST data. This prevents data from being posted twice if a
             # user hits the Back button.
-            messages.success(request, 'Vote successful!')
+            messages.info(request, 'Vote successful!')
+            messages.success(request, 'You can participate in other polls following <a href="/polls/">this</a> link!')
+            request.session[poll_id] = True
             return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
